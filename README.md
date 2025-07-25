@@ -1,98 +1,140 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# API Gateway con NestJS y Microservicios
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Este proyecto implementa un API Gateway utilizando NestJS, que recibe peticiones HTTP y las reenvía a uno o varios microservicios (como un microservicio de chat o GraphQL).  
+El tipo de transporte (TCP, Redis, etc.) se configura  mediante un archivo `.env`.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+##  Estructura del proyecto
 
-## Project setup
+api-gateway/
+│
+├── src/
+│ ├── chat/ # Lógica para conexión con microservicio de chat
+│ ├── graphql-proxy/ # Lógica para conexión con GraphQL (opcional)
+│ ├── app.controller.ts # Endpoint HTTP principal
+│ ├── app.module.ts # Configura módulos y clientes
+│ ├── app.service.ts # Lógica de reenvío según el microservicio
+│ └── main.ts # Inicia el Gateway y el transporte dinámico
+│
+├── .env # Configuración del transporte (ej. TCP)
+├── README.md # Este archivo
+├── package.json
+└── tsconfig.json
 
-```bash
-$ npm install
-```
 
-## Compile and run the project
 
-```bash
-# development
-$ npm run start
 
-# watch mode
-$ npm run start:dev
 
-# production mode
-$ npm run start:prod
-```
+## Entregables
 
-## Run tests
+-  Código fuente del API Gateway (`src/` completo)
+-  Archivo `.env` de ejemplo
+-  Instrucciones detalladas de uso (ver más abajo)
+-  Preparado para ser subido a un repositorio GitHub
 
-```bash
-# unit tests
-$ npm run test
 
-# e2e tests
-$ npm run test:e2e
 
-# test coverage
-$ npm run test:cov
-```
+##  Archivo `.env` de ejemplo ##
 
-## Deployment
+-Tipo de transporte que se usará (tcp, redis o nats)
+TRANSPORT=tcp
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+#Configuración para TCP
+TCP_HOST=127.0.0.1
+TCP_PORT=3010
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+#Si se usa Redis (como alternativa)
+#REDIS_HOST=localhost
+#REDIS_PORT=6379
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
+#Si se usa NATS (como otra opción)
+#NATS_URL=nats://localhost:4222
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## Cómo ejecutar el Gateway##
+1. Instalar dependencias
 
-## Resources
+npm install
+2. Crear el archivo .env
+Puedes usar el archivo .env de ejemplo anterior y personalizarlo según el transporte que vayas a probar.
 
-Check out a few resources that may come in handy when working with NestJS:
+3. Iniciar el Gateway
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+npm run start:dev
+Asegúrate de que los microservicios (chat, graphql, etc.) estén también ejecutándose.
 
-## Support
+¿Cómo probarlo?
+Puedes usar Postman para enviar mensajes al microservicio de chat a través del Gateway.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Endpoint disponible:
+POST http://localhost:3000/chat
 
-## Stay in touch
+Body (JSON):
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
-## License
+{
+  "user": "Juan",
+  "message": "Hola desde el Gateway"
+}
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+-Resultado esperado
+El microservicio de chat mostrará en su consola:
+
+[Microservice] Juan: Hola desde el Gateway
+Y el Gateway responderá:
+
+
+{
+  "status": "sent"
+
+}
+
+## Probar microservicio GraphQL de autos##
+Endpoint disponible:
+
+POST http://localhost:3000/autos
+Headers:
+
+
+Content-Type: application/json
+Body (GraphQL Query):
+
+
+{
+  "query": "query GetAuto($id: Int!) { auto(id: $id) { id marca potencia } }",
+  "variables": {
+    "id": 1
+  }
+}
+Este endpoint hace proxy de la solicitud al microservicio de autos que corre como un servidor GraphQL independiente. El API Gateway redirige internamente esta petición.
+
+ Y para agregar un vehiculo:
+
+{
+  "query": "mutation CreateAuto($input: CreateAutoInput!) { createAuto(createAutoInput: $input) { id marca potencia } }",
+  "variables": {
+    "input": {
+      "marca": "Toyota",
+      "potencia": 110
+    }
+  }
+}
+
+## Probar microservicio de tiempo##
+
+Hacemos un GET en postman y colocamos http://localhost:3000/time y nos deberia dar algo como esto: 
+
+{
+    "time": "2025-07-25T01:31:16.147Z"
+}
+
+#Tecnologías usadas
+NestJS
+
+@nestjs/microservices
+
+Transporte por TCP (también puede ser Redis o NATS)
+
+WebSockets (en microservicio de chat)
+
+Postman para pruebas
