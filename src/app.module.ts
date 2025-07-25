@@ -3,9 +3,11 @@ import { AppController } from './app.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { GraphqlProxyService } from './graphql-proxy/graphql-proxy.service';
 import { GraphqlProxyController } from './graphql-proxy/graphql-proxy.controller';
+import { ChatController } from './chat/chat.controller';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
+
 
 let clientConfig;
 
@@ -43,9 +45,35 @@ switch (process.env.TRANSPORT) {
     throw new Error('Transporte no soportado');
 }
 
+let chatClient;
+
+switch (process.env.CHAT_TRANSPORT) {
+  case 'TCP':
+    chatClient = {
+      name: 'CHAT_SERVICE',
+      transport: Transport.TCP,
+      options: {
+        host: process.env.CHAT_TCP_HOST,
+        port: Number(process.env.CHAT_TCP_PORT),
+      },
+    };
+    break;
+  case 'REDIS':
+    chatClient = {
+      name: 'CHAT_SERVICE',
+      transport: Transport.REDIS,
+      options: {
+        host: process.env.CHAT_REDIS_HOST,
+        port: Number(process.env.CHAT_REDIS_PORT),
+      },
+    };
+    break;
+}
+
 @Module({
-  imports: [ClientsModule.register([clientConfig])],
-  controllers: [AppController, GraphqlProxyController],
+  imports: [ClientsModule.register([clientConfig, chatClient])],
+  controllers: [AppController, GraphqlProxyController, ChatController],
   providers: [GraphqlProxyService],
 })
 export class AppModule {}
+
